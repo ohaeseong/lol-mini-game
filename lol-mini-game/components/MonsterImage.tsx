@@ -15,15 +15,22 @@ const MONSTER_IMAGES: {
 type Props = {
   className?: React.HtmlHTMLAttributes<HTMLDivElement>['className'];
   type: MonsterType;
+  width?: number;
+  height?: number;
 };
 
-const MonsterImage: React.FC<Props> = ({ className, type }) => {
+const MonsterImage: React.FC<Props> = ({
+  className,
+  type,
+  width = 160,
+  height = 160,
+}) => {
   return (
     <Image
       className={classNames('object-contain', className)}
       src={MONSTER_IMAGES[type.toUpperCase()]}
-      width={160}
-      height={160}
+      width={width}
+      height={height}
       alt={type}
     />
   );

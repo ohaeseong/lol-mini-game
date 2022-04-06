@@ -11,7 +11,7 @@ const HealthBar: React.FC<Props> = ({ value, animation, state }) => {
   return (
     <div
       className={classNames('absolute h-full', {
-        'transition-all': animation,
+        'transition-all duration-500': animation,
         'bg-yellow-100': state === 2,
         'bg-orange-100': state === 1,
         'bg-red-100': state === 0,

@@ -8,7 +8,7 @@ import Button from '../components/Button';
 import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   const [monster, setMonster] = React.useState(MonsterType.DRAGON);
   const router = useRouter();
 
