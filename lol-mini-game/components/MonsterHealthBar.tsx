@@ -4,11 +4,15 @@ import HealthBar from './HealthBar';
 
 type Props = {
   className?: React.HtmlHTMLAttributes<HTMLDivElement>['className'];
-  value: number;
+  progressValue: number;
   health: number;
 };
 
-const MonsterHealthBar: React.FC<Props> = ({ className, value, health }) => {
+const MonsterHealthBar: React.FC<Props> = ({
+  className,
+  progressValue,
+  health,
+}) => {
   return (
     <div
       className={classNames(
@@ -17,8 +21,8 @@ const MonsterHealthBar: React.FC<Props> = ({ className, value, health }) => {
       )}
     >
       <span className="absolute top-2 left-1/2 z-10 text-white">{health}</span>
-      <HealthBar value={value} state={1} animation />
-      <HealthBar value={value} state={2} />
+      <HealthBar value={progressValue} theme="primary" animation />
+      <HealthBar value={progressValue} theme="secondary" />
     </div>
   );
 };

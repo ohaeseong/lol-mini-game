@@ -5,14 +5,15 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import DefaultLayout from '../../layouts/DefaultLayout';
+import { setStorage } from '../../utils/storage';
 
 const Setting: NextPage = () => {
-  const [spellKey, setSpellKey] = useState('D');
+  const [smiteKey, setSmiteKey] = useState('D');
   const router = useRouter();
 
   useEffect(() => {
-    localStorage.setItem('smite_key', spellKey);
-  }, [spellKey]);
+    setStorage('smite_key', smiteKey);
+  }, [smiteKey, router]);
 
   return (
     <DefaultLayout theme="secondary">
@@ -26,13 +27,13 @@ const Setting: NextPage = () => {
           />
           <div className="flex space-x-3">
             <SetButton
-              selected={spellKey === 'D'}
+              selected={smiteKey === 'D'}
               onClick={handleSpellKey('D')}
             >
               D
             </SetButton>
             <SetButton
-              selected={spellKey === 'F'}
+              selected={smiteKey === 'F'}
               onClick={handleSpellKey('F')}
             >
               F
@@ -54,7 +55,7 @@ const Setting: NextPage = () => {
 
   function handleSpellKey(key: 'D' | 'F'): () => void {
     return () => {
-      setSpellKey(key);
+      setSmiteKey(key);
     };
   }
 

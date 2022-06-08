@@ -4,17 +4,21 @@ import React from 'react';
 type Props = {
   value: number;
   animation?: boolean;
-  state: number;
+  theme?: 'primary' | 'secondary' | 'tertiary';
 };
 
-const HealthBar: React.FC<Props> = ({ value, animation, state }) => {
+const HealthBar: React.FC<Props> = ({
+  value,
+  animation,
+  theme = 'primary',
+}) => {
   return (
     <div
       className={classNames('absolute h-full', {
         'transition-all duration-500': animation,
-        'bg-yellow-100': state === 2,
-        'bg-orange-100': state === 1,
-        'bg-red-100': state === 0,
+        'bg-yellow-100': theme === 'primary',
+        'bg-orange-100': theme === 'secondary',
+        'bg-red-100': theme === 'tertiary',
       })}
       style={{
         width: `${value}%`,

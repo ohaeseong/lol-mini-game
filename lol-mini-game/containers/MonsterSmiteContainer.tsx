@@ -1,176 +1,202 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import { MonsterType } from '../components/MonsterCard';
 import MonsterHealthBar from '../components/MonsterHealthBar';
 import MonsterImage from '../components/MonsterImage';
 import DefaultLayout from '../layouts/DefaultLayout';
+import { getStorage } from '../utils/storage';
+
+type TimerRange = {
+  min: number;
+  max: number;
+};
+
+type MonsterAbility = {
+  health: number;
+  attackRange: TimerRange;
+  attackSpeedRange: TimerRange;
+};
 
 type Props = {
   monster: MonsterType;
 };
 
 const MonsterSmiteContainer: React.FC<Props> = ({ monster }) => {
-  const startHealth = getMonsterHealth(monster);
-  const [monsterHealth, setMonsterHealth] = React.useState(startHealth);
-  const [finalHealth, setFinalHealth] = React.useState(0);
-  const [progressValue, setProgressValue] = React.useState(100);
-  const [finalValue, setFinalValue] = React.useState(-1);
-  const [gameState, setGameState] = React.useState(0);
+  const [isReady, setIsReady] = useState(true);
 
-  const handleSmite = React.useCallback(
-    (damage: number) => {
-      if (finalHealth || gameState === 0) return;
+  const [entireMonsterHealth, setEntireMonsterHealth] = useState(0);
+  const [monsterHealth, setMonsterHealth] = useState(0);
+  const [progressValue, setProgressValue] = useState(100);
+  const [smiteKey, setSmiteKey] = useState('');
 
-      if (monsterHealth - damage <= 0) {
-        const overDamage = monsterHealth - damage;
+  const [finalMonsterHealth, setFinalMonsterHealth] = useState(-1);
+  const [finalProgressValue, setFinalProgressValue] = useState(-1);
 
-        if (overDamage * -1 >= 100) {
-          setFinalValue(0);
-          return;
-        }
-
-        setFinalHealth(0);
-        setFinalValue(0);
-      } else {
-        setFinalHealth(monsterHealth - damage);
-        setFinalValue(
-          Math.floor(((monsterHealth - damage) / startHealth) * 100)
-        );
-      }
-
-      setGameState(-1);
-    },
-    [finalHealth, gameState, monsterHealth, startHealth]
-  );
-
-  const handleBaronHealth = React.useCallback(
-    (damage: number) => {
-      if (monsterHealth > 0 && finalHealth === 0) {
-        const health = monsterHealth - damage;
-
-        if (health <= 0) {
-          setMonsterHealth(0);
-          return;
-        }
-
-        setMonsterHealth(health);
-        setProgressValue((health / startHealth) * 100);
-      } else {
-        setFinalHealth(monsterHealth - damage);
-        setFinalValue(
-          Math.floor(((monsterHealth - damage) / startHealth) * 100)
-        );
-      }
-    },
-    [monsterHealth, startHealth]
-  );
-
-  const startGame = () => {
-    if (gameState === 0) {
-      setGameState(1);
-      setMonsterHealth(startHealth);
-    }
-  };
-
-  const handleYoungSmite = () => {
-    handleSmite(450);
-  };
-
-  const handleOldSmite = React.useCallback(() => {
-    handleSmite(900);
-  }, [handleSmite]);
-
-  const playGame = React.useCallback(() => {
-    const timeSpeedList = [100, 200, 400, 500, 600, 700, 800, 1000];
-    const timeSpeed = timeSpeedList[Math.floor(Math.random() * 4)];
-
-    const timer = setTimeout(async () => {
-      let damage = Math.floor(Math.random() * 150);
-      if (!damage) damage = 1;
-
-      handleBaronHealth(damage);
-    }, timeSpeed);
-
-    if (monsterHealth <= 0 || finalValue !== -1) {
-      clearTimeout(timer);
-    }
-  }, [monsterHealth, finalValue, handleBaronHealth]);
+  const [isUseSmite, setIsUseSmite] = useState(false);
 
   useEffect(() => {
-    if (gameState === 1) {
-      playGame();
+    setSmiteKey(getStorage('smite_key'));
+
+    if (isReady) return;
+    const { attackRange, attackSpeedRange } = getMonsterAbilityByLevel();
+    let newHealth = monsterHealth - getRandomEssence(attackRange);
+
+    if (newHealth < 0) newHealth = 0;
+
+    if (newHealth >= 0 && !isUseSmite) {
+      setTimeout(() => {
+        handleMonsterStats(newHealth);
+      }, getRandomEssence(attackSpeedRange));
     }
-  }, [gameState, monsterHealth, playGame]);
+  }, [isReady, monsterHealth]);
 
   useEffect(() => {
-    if (gameState === 1) {
-      const smiteKey = localStorage.getItem('smite_key');
-      if (smiteKey) {
-        document.addEventListener('keydown', (event: KeyboardEvent) => {
-          if (event.key === smiteKey.toLowerCase()) {
-            handleOldSmite();
-          }
-        });
-      }
+    if (!monster) return;
+    const { health } = getMonsterAbilityByLevel();
+    setMonsterHealth(health);
+    setEntireMonsterHealth(health);
+  }, [monster]);
+
+  useEffect(() => {
+    if (!isReady) {
+      if (!smiteKey) return;
+      document.addEventListener('keydown', (e) => {
+        if (e.key === smiteKey.toLowerCase()) {
+          embezzleSmite();
+        }
+      });
     }
-  }, [gameState, handleOldSmite]);
+  }, [isReady, monsterHealth, smiteKey]);
 
   return (
-    <DefaultLayout theme="secondary">
-      {gameState === 0 ? (
+    <>
+      {isReady ? (
         <>
-          <h1 className="z-10 font-beaufort-bold text-5xl text-white">
+          <Button
+            className="absolute top-1/2 left-1/2 z-30 -translate-x-1/2 bg-opacity-100 text-3xl font-bold"
+            onClick={startGame}
+          >
             Ready?
-          </h1>
-          <Button className="z-10" onClick={startGame}>
-            GO!
           </Button>
-          <div className="fixed h-screen w-screen bg-black opacity-50" />
+          <div className="absolute z-20 flex h-screen w-screen items-center justify-center bg-black opacity-60" />
         </>
       ) : (
-        <>
-          {!finalHealth ? (
-            <MonsterHealthBar value={progressValue} health={monsterHealth} />
-          ) : (
-            <MonsterHealthBar value={finalValue} health={finalHealth} />
-          )}
-          {monster && <MonsterImage type={monster} width={250} height={250} />}
-          <div className="relative flex h-12 w-12 cursor-pointer items-center justify-center">
-            <span className="absolute z-20 font-beaufort-bold text-3xl text-white">
-              {getSmiteKey()}
-            </span>
-            <div className="absolute z-10 h-full w-full bg-red-100 opacity-30" />
-            <Image
-              className="absolute"
-              src="/images/icon/smite.png"
-              width={60}
-              height={60}
-              alt="smite"
-            />
-          </div>
-        </>
+        <></>
       )}
-    </DefaultLayout>
+
+      <DefaultLayout theme="secondary">
+        {finalMonsterHealth === -1 ? (
+          <MonsterHealthBar
+            progressValue={progressValue}
+            health={monsterHealth}
+          />
+        ) : (
+          <MonsterHealthBar
+            progressValue={finalProgressValue}
+            health={finalMonsterHealth}
+          />
+        )}
+        {monster && <MonsterImage type={monster} width={250} height={250} />}
+        <div
+          className="relative flex h-12 w-12 cursor-pointer items-center justify-center"
+          onClick={embezzleSmite}
+        >
+          <span className="absolute z-10 font-beaufort-bold text-3xl text-white">
+            {smiteKey}
+          </span>
+          <div className="absolute z-10 h-full w-full bg-red-100 opacity-30" />
+          <Image
+            className="absolute"
+            src="/images/icon/smite.png"
+            width={60}
+            height={60}
+            alt="smite"
+          />
+        </div>
+      </DefaultLayout>
+    </>
   );
 
-  function getMonsterHealth(monster: MonsterType) {
+  function embezzleSmite(): void {
+    const newHealth = monsterHealth - 900;
+    setIsUseSmite(true);
+
+    setFinalMonsterHealth(newHealth);
+    if (newHealth <= 0) {
+      setFinalProgressValue(0);
+    } else {
+      setFinalProgressValue((newHealth / entireMonsterHealth) * 100);
+    }
+  }
+
+  function handleMonsterStats(newHealth: number): void {
+    setMonsterHealth(newHealth);
+    setProgressValue((newHealth / entireMonsterHealth) * 100);
+  }
+
+  function getRandomEssence(range: TimerRange): number {
+    return Math.floor(Math.random() * (range.max - range.min)) + range.min;
+  }
+
+  function getMonsterAbilityByLevel(): MonsterAbility {
     switch (monster) {
       case MonsterType.DRAGON:
-        return 3500;
+        return {
+          health: 3500,
+          attackRange: {
+            min: 0,
+            max: 300,
+          },
+          attackSpeedRange: {
+            min: 100,
+            max: 500,
+          },
+        };
       case MonsterType.RIFT_HERALD:
-        return 7125;
+        return {
+          health: 7150,
+          attackRange: {
+            min: 100,
+            max: 400,
+          },
+          attackSpeedRange: {
+            min: 100,
+            max: 500,
+          },
+        };
       case MonsterType.BARON_NASHOOR:
-        return 9000;
+        return {
+          health: 9000,
+          attackRange: {
+            min: 100,
+            max: 300,
+          },
+          attackSpeedRange: {
+            min: 100,
+            max: 300,
+          },
+        };
       case MonsterType.ELDER_DRAGON:
-        return 12500;
+        return {
+          health: 13000,
+          attackRange: {
+            min: 200,
+            max: 450,
+          },
+          attackSpeedRange: {
+            min: 100,
+            max: 400,
+          },
+        };
       default:
         break;
     }
   }
 
-  function getSmiteKey() {
-    return localStorage.getItem('smite_key');
+  function startGame() {
+    setIsReady(false);
   }
 };
 

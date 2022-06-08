@@ -6,13 +6,12 @@ import MonsterSelector from '../components/MonsterSelector';
 import DefaultLayout from '../layouts/DefaultLayout';
 import Button from '../components/Button';
 import { useRouter } from 'next/router';
+import { getStorage } from '../utils/storage';
 
 const Home: NextPage = () => {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [monster, setMonster] = React.useState(MonsterType.DRAGON);
   const router = useRouter();
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     if (loading === false) return;
@@ -41,7 +40,8 @@ const Home: NextPage = () => {
   }
 
   function linkToMonsterPage(): () => void {
-    const smiteKey = localStorage.getItem('smite_key');
+    const smiteKey = getStorage('smite_key');
+
     if (!smiteKey) {
       return () => {
         router.push(`/setting?${monster}`);
