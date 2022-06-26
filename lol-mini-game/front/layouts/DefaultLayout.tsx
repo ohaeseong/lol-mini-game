@@ -1,6 +1,4 @@
 import classNames from 'classnames';
-import { includes } from 'lodash';
-import { useRouter } from 'next/router';
 import React from 'react';
 import Footer from '../components/Footer';
 

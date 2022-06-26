@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { Dialog } from '@headlessui/react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import Button from '../components/Button';
+import GameResultBox from '../components/GameResultBox';
 import { MonsterType } from '../components/MonsterCard';
 import MonsterHealthBar from '../components/MonsterHealthBar';
 import MonsterImage from '../components/MonsterImage';
@@ -72,7 +74,7 @@ const MonsterSmiteContainer: React.FC<Props> = ({ monster }) => {
 
   return (
     <>
-      {isReady ? (
+      {isReady && (
         <>
           <Button
             className="absolute top-1/2 left-1/2 z-30 -translate-x-1/2 bg-opacity-100 text-3xl font-bold"
@@ -82,9 +84,13 @@ const MonsterSmiteContainer: React.FC<Props> = ({ monster }) => {
           </Button>
           <div className="absolute z-20 flex h-screen w-screen items-center justify-center bg-black opacity-60" />
         </>
-      ) : (
-        <></>
       )}
+
+      <GameResultBox
+        isWin={Math.abs(finalMonsterHealth) <= 150}
+        point={finalMonsterHealth}
+        visible={isUseSmite}
+      />
 
       <DefaultLayout theme="secondary">
         {finalMonsterHealth === -1 ? (
@@ -121,9 +127,10 @@ const MonsterSmiteContainer: React.FC<Props> = ({ monster }) => {
 
   function embezzleSmite(): void {
     const newHealth = monsterHealth - 900;
-    setIsUseSmite(true);
 
+    setIsUseSmite(true);
     setFinalMonsterHealth(newHealth);
+
     if (newHealth <= 0) {
       setFinalProgressValue(0);
     } else {
