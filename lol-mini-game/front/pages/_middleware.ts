@@ -22,17 +22,6 @@ export async function middleware(req: NextRequest) {
       .split('-')?.[0]
       .toLowerCase() || 'en';
 
-  if (nextUrl.locale !== 'default') {
-    return undefined;
-  }
-
-  if (cookies.NEXT_LOCALE && nextUrl.locale === 'default') {
-    url.pathname = `/${cookies.NEXT_LOCALE}${nextUrl.pathname}`;
-    return NextResponse.redirect(url);
-  }
-
-  if (language === 'ko') {
-    url.pathname = `/ko${nextUrl.pathname}`;
-    return NextResponse.redirect(url);
-  }
+  url.pathname = `/ko${nextUrl.pathname}`;
+  return NextResponse.redirect(url);
 }
