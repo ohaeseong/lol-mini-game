@@ -22,6 +22,7 @@ export async function middleware(req: NextRequest) {
       .split('-')?.[0]
       .toLowerCase() || 'en';
 
-  url.pathname = `/ko${nextUrl.pathname}`;
+  const country = req?.geo.country;
+  url.pathname = `/${country}${nextUrl.pathname}`;
   return NextResponse.redirect(url);
 }
