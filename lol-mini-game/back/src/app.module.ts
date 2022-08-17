@@ -18,7 +18,7 @@ import { join } from 'path';
       host: DB_HOST,
       port: 3306,
       username: DB_USER,
-      password: DB_PASSWORD,
+      // password: DB_PASSWORD,
       database: DB_NAME,
       synchronize: true,
       entities: [Rank],

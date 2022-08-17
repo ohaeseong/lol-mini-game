@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Rank } from './entities/rank.entity';
-import { CreateRankInput } from './rank.input';
+import { CreateRankInput, UpdateRankInput } from './rank.input';
 
 @Injectable()
 export class RankService {
@@ -17,17 +17,14 @@ export class RankService {
       },
     });
 
-    const sortedRanks = ranks.map((rank, index) => {
-      return Math.abs(rank.score - 0) < Math.abs(ranks[index + 1]?.score - 0)
-        ? rank
-        : ranks[index + 1];
-    });
-    console.log(sortedRanks);
-
-    return sortedRanks;
+    return ranks;
   }
 
   createRank(rank: CreateRankInput): Promise<Rank> {
     return this.rankRepo.save(rank);
   }
+
+  // updateRank(rank: UpdateRankInput): Promise<Rank> {
+  //   return this.rankRepo.update({});
+  // }
 }

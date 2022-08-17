@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { IRank } from '../../common/types/Rank';
+import Image from 'next/image';
 import Button from '../components/Button';
 import Footer from '../components/Footer';
 import { useRanks } from '../queries/rank';
@@ -29,13 +29,18 @@ const RankContainer: NextPage = () => {
         SMITE OF LEGENDS
       </h1>
 
-      <hr className="mb-5 w-32 border-brown-400" />
+      <hr className="mb-5 w-32 border-light-gray-100" />
 
       <h1 className="mt-0 mb-10 font-beaufort-bold text-xl tracking-widest">
         RANKING
       </h1>
 
-      <div className="my-2 h-40 w-52 border" />
+      <Image
+        src="/images/logos/opgg_logo.webp"
+        width={300}
+        height={200}
+        alt="opgg_logo"
+      />
       <span className="font-bold text-gray-200">
         Any other thoughts while playing?
       </span>

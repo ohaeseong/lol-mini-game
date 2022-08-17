@@ -8,3 +8,12 @@ export class CreateRankInput {
   @Field()
   summoner: string;
 }
+
+@InputType()
+export class UpdateRankInput {
+  @Field()
+  id: number;
+
+  @Field()
+  score: number;
+}

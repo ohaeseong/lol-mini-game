@@ -17,6 +17,7 @@ module.exports = {
       'brown-400': '#947342',
       'gray-100': '#979797',
       'gray-200': '#696969',
+      'light-gray-100': '#d8d8d8',
       'yellow-100': '#d69d1f',
       'red-100': '#d61f1f',
       'orange-100': '#d6701f',
@@ -34,6 +35,16 @@ module.exports = {
       fontFamily: {
         beaufort: ['beaufort-regular', 'sans-serif'],
         'beaufort-bold': ['beaufort-bold', 'sans-serif'],
+      },
+
+      keyframes: {
+        progress: {
+          from: { width: '0%' },
+          to: { width: '100%' },
+        },
+        animation: {
+          progress: 'progress 5s ease-in-out',
+        },
       },
     },
   },

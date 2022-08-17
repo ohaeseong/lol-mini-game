@@ -22,15 +22,25 @@ const Home: NextPage = () => {
 
   return (
     <DefaultLayout>
-      {!loading ? (
+      {loading ? (
+        <>
+          <Image src="/images/logo.png" width={500} height={200} alt="logo" />
+          <div className="relative flex w-1/4 overflow-hidden rounded">
+            <div className="flex-1 -rotate-180 ">
+              <div className="animate-[progress_5s_ease-in-out] border border-brown-300" />
+            </div>
+            <div className="flex-1">
+              <div className="animate-[progress_5s_ease-in-out] border border-brown-300" />
+            </div>
+          </div>
+        </>
+      ) : (
         <div className="flex flex-col items-center justify-center space-y-16">
           <MonsterSelector selectedMonster={monster} onChange={handleMonster} />
           <Button size="lg" onClick={linkToMonsterPage()}>
             START
           </Button>
         </div>
-      ) : (
-        <Image src="/images/logo.png" width={500} height={200} alt="logo" />
       )}
     </DefaultLayout>
   );
