@@ -3,6 +3,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import Button from './Button';
 import { useRouter } from 'next/router';
+import { useAddRank } from '../mutations/rank';
 
 type Props = {
   className?: React.HtmlHTMLAttributes<HTMLDivElement>['className'];
@@ -19,6 +20,8 @@ const GameResultBox: React.FC<Props> = ({
   isWin,
   point,
 }: Props) => {
+  const [summoner, setSummoner] = React.useState('');
+  const { addRank } = useAddRank();
   const router = useRouter();
 
   return (
@@ -53,12 +56,16 @@ const GameResultBox: React.FC<Props> = ({
             <input
               className="mt-4 rounded border border-brown-400 py-1 pl-2 focus:outline-none"
               placeholder="If you want to rank your point, Please write your LOL nick name."
+              onChange={handleSummoner}
+              value={summoner}
             />
             <div className="mt-4 flex space-x-4">
               <Button className="rounded" onClick={onReload}>
                 Retry
               </Button>
-              <Button className="rounded">Rank</Button>
+              <Button className="rounded" onClick={onRank}>
+                Rank
+              </Button>
             </div>
           </div>
         </div>
@@ -68,6 +75,28 @@ const GameResultBox: React.FC<Props> = ({
 
   function onReload() {
     router.reload();
+  }
+
+  function handleSummoner(event) {
+    setSummoner(event.target.value);
+  }
+
+  async function onRank() {
+    if (!summoner) {
+      window.alert('소환사 이름을 작성해 주세요.');
+      return;
+    }
+
+    await addRank({
+      variables: {
+        createRankData: {
+          score: point,
+          summoner,
+        },
+      },
+    });
+
+    router.push('/rank');
   }
 };
 

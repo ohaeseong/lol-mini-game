@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 import React from 'react';
-import DefaultLayout from '../../layouts/DefaultLayout';
+import RankContainer from '../../containers/RankContainer';
 
 const RankPage: NextPage = () => {
-  return <DefaultLayout theme="secondary">test</DefaultLayout>;
+  return <RankContainer />;
 };
 
 export default RankPage;

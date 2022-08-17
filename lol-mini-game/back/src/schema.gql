@@ -2,6 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Rank {
+  id: Int!
+  summoner: String!
+  score: Int!
+}
+
 type Query {
-  getRankList: String!
+  getRankList: [Rank!]!
+}
+
+type Mutation {
+  createRank(createRankData: CreateRankInput!): Rank!
+}
+
+input CreateRankInput {
+  score: Float!
+  summoner: String!
 }

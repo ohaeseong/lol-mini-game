@@ -56,20 +56,21 @@ const MonsterSmiteContainer: React.FC<Props> = ({ monster }) => {
 
   useEffect(() => {
     if (!monster) return;
+
     const { health } = getMonsterAbilityByLevel();
+
     setMonsterHealth(health);
     setEntireMonsterHealth(health);
   }, [monster]);
 
   useEffect(() => {
-    if (!isReady) {
-      if (!smiteKey) return;
-      document.addEventListener('keydown', (e) => {
-        if (e.key === smiteKey.toLowerCase()) {
-          embezzleSmite();
-        }
-      });
-    }
+    if (isReady || !smiteKey || isUseSmite) return;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === smiteKey.toLowerCase()) {
+        embezzleSmite();
+      }
+    });
   }, [isReady, monsterHealth, smiteKey]);
 
   return (
