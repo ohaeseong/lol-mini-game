@@ -2,21 +2,28 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Rank {
+type ObjectRank {
   id: Int!
   summoner: String!
-  score: Int!
+  damage: Int!
+  dragon: Int!
+  riftHerald: Int!
+  baronNashor: Int!
+  elderDragon: Int!
 }
 
 type Query {
-  getRankList: [Rank!]!
+  getRankList: [ObjectRank!]!
 }
 
 type Mutation {
-  createRank(createRankData: CreateRankInput!): Rank!
+  createRank(createObjectRankData: CreateObjectRankInput!): ObjectRank!
 }
 
-input CreateRankInput {
-  score: Float!
+input CreateObjectRankInput {
+  dragon: Float!
+  riftHerald: Float!
+  baronNashor: Float!
+  elderDragon: Float!
   summoner: String!
 }

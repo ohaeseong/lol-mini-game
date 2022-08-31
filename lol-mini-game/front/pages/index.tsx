@@ -36,7 +36,11 @@ const Home: NextPage = () => {
         </>
       ) : (
         <div className="flex flex-col items-center justify-center space-y-16">
-          <MonsterSelector selectedMonster={monster} onChange={handleMonster} />
+          <MonsterSelector
+            selectedMonster={monster}
+            onChange={handleMonster}
+            disableSelect
+          />
           <Button size="lg" onClick={linkToMonsterPage()}>
             START
           </Button>

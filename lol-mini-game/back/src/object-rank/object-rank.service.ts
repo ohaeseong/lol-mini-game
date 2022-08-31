@@ -1,26 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Rank } from './entities/rank.entity';
-import { CreateRankInput, UpdateRankInput } from './rank.input';
+import { ObjectRank } from './entities/object-rank.entity';
+import { CreateObjectRankInput, UpdateRankInput } from './object-rank.input';
 
 @Injectable()
 export class RankService {
   constructor(
-    @InjectRepository(Rank) private readonly rankRepo: Repository<Rank>,
+    @InjectRepository(ObjectRank)
+    private readonly rankRepo: Repository<ObjectRank>,
   ) {}
 
-  async getRankList(): Promise<Array<Rank>> {
+  async getRankList(): Promise<Array<ObjectRank>> {
     const ranks = await this.rankRepo.find({
       order: {
-        score: 'ASC',
+        damage: 'ASC',
       },
     });
 
     return ranks;
   }
 
-  createRank(rank: CreateRankInput): Promise<Rank> {
+  createRank(rank: CreateObjectRankInput): Promise<ObjectRank> {
+    console.log(rank);
+
     return this.rankRepo.save(rank);
   }
 

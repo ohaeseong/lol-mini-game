@@ -5,12 +5,14 @@ import MonsterCard, { MonsterType } from './MonsterCard';
 type Props = {
   className?: React.HtmlHTMLAttributes<HTMLDivElement>['className'];
   selectedMonster: MonsterType;
+  disableSelect?: boolean;
   onChange: (type: MonsterType) => void;
 };
 
 const MonsterSelector: React.FC<Props> = ({
   className,
   selectedMonster,
+  disableSelect,
   onChange,
 }: Props) => {
   return (
@@ -21,7 +23,7 @@ const MonsterSelector: React.FC<Props> = ({
             className="cursor-pointer"
             type={monster}
             level={index + 1}
-            selected={monster === selectedMonster}
+            selected={!disableSelect ? monster === selectedMonster : true}
           />
         </div>
       ))}
@@ -29,6 +31,8 @@ const MonsterSelector: React.FC<Props> = ({
   );
 
   function handleClick(type: MonsterType) {
+    if (disableSelect) return;
+
     return () => {
       onChange(type);
     };
