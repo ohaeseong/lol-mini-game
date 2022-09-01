@@ -1,15 +1,15 @@
 import React from 'react';
-import { Transition } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import Button from './Button';
 import { useRouter } from 'next/router';
-import { useAddObjectRank } from '../mutations/rank';
+import { useAddRank } from '../mutations/rank';
 
 type Props = {
   className?: React.HtmlHTMLAttributes<HTMLDivElement>['className'];
   onClose?: () => void;
   visible: boolean;
-  isSuccess: boolean;
+  isWin: boolean;
   point: number;
 };
 
@@ -17,11 +17,11 @@ const GameResultBox: React.FC<Props> = ({
   className,
   onClose,
   visible,
-  isSuccess,
+  isWin,
   point,
 }: Props) => {
   const [summoner, setSummoner] = React.useState('');
-  const { addRank } = useAddObjectRank();
+  const { addRank } = useAddRank();
   const router = useRouter();
 
   return (
@@ -42,35 +42,30 @@ const GameResultBox: React.FC<Props> = ({
       >
         <div
           className={classNames(
-            'flex h-screen w-full items-center justify-center',
+            ' flex h-screen w-full items-center justify-center',
             className
           )}
         >
           <div className="flex flex-col rounded bg-white p-4">
             <span className="text-2xl font-bold text-brown-400">
-              {isSuccess ? 'SUCCESS!' : 'FAIL..'}
+              {isWin ? 'WIN!' : 'LOSE..'}
             </span>
             <span className="mt-4 inline-block text-lg">
               your point: {point}
             </span>
-            {isSuccess && (
-              <input
-                className="mt-4 rounded border border-brown-400 py-1 pl-2 focus:outline-none"
-                placeholder="If you want to rank your point, Please write your LOL nick name."
-                onChange={handleSummoner}
-                value={summoner}
-              />
-            )}
+            <input
+              className="mt-4 rounded border border-brown-400 py-1 pl-2 focus:outline-none"
+              placeholder="If you want to rank your point, Please write your LOL nick name."
+              onChange={handleSummoner}
+              value={summoner}
+            />
             <div className="mt-4 flex space-x-4">
-              {isSuccess ? (
-                <Button className="rounded" onClick={onRank}>
-                  Next
-                </Button>
-              ) : (
-                <Button className="w-full rounded" onClick={onReload}>
-                  Retry
-                </Button>
-              )}
+              <Button className="rounded" onClick={onReload}>
+                Retry
+              </Button>
+              <Button className="rounded" onClick={onRank}>
+                Rank
+              </Button>
             </div>
           </div>
         </div>

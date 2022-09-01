@@ -31,7 +31,7 @@ const RankContainer: NextPage = () => {
 
       <hr className="mb-5 w-32 border-light-gray-100" />
 
-      <h1 className="mb-10 font-beaufort-bold text-xl tracking-widest">
+      <h1 className="mt-0 mb-10 font-beaufort-bold text-xl tracking-widest">
         RANKING
       </h1>
 

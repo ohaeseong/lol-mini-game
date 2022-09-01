@@ -6,10 +6,7 @@ export const CREATE_RANK = gql`
   mutation CreateRank($createRankData: CreateRankInput!) {
     createRank(createRankData: $createRankData) {
       summoner
-      dragon
-      riftHerald
-      baronNashor
-      elderDragon
+      score
     }
   }
 `;
@@ -18,7 +15,7 @@ export interface CreateRankParams {
   createRankData: ICreateRank;
 }
 
-export function useAddObjectRank() {
+export function useAddRank() {
   const [addRank, { data, ...rest }] = useMutation<
     { rank: IRank },
     CreateRankParams

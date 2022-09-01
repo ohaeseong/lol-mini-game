@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
-export class ObjectRank {
+export class Rank {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
   id: number;
@@ -14,21 +14,5 @@ export class ObjectRank {
 
   @Field(() => Int)
   @Column({ type: 'int' })
-  damage: number;
-
-  @Field(() => Int)
-  @Column({ type: 'int' })
-  dragon: number;
-
-  @Field(() => Int)
-  @Column({ type: 'int' })
-  riftHerald: number;
-
-  @Field(() => Int)
-  @Column({ type: 'int' })
-  baronNashor: number;
-
-  @Field(() => Int)
-  @Column({ type: 'int' })
-  elderDragon: number;
+  score: number;
 }
