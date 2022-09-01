@@ -6,6 +6,7 @@ import { GET_RANK_LIST } from './rank.queries';
 export function useRanks() {
   const { data, ...rest } = useQuery<{ getRankList: IRank[] }>(GET_RANK_LIST, {
     client,
+    fetchPolicy: 'cache-and-network',
   });
 
   return {

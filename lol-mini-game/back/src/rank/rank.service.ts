@@ -13,7 +13,7 @@ export class RankService {
   async getRankList(): Promise<Array<Rank>> {
     const ranks = await this.rankRepo.find({
       order: {
-        score: 'ASC',
+        score: 'DESC',
       },
     });
 

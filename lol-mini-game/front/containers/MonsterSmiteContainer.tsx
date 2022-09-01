@@ -88,7 +88,7 @@ const MonsterSmiteContainer: React.FC<Props> = ({ monster }) => {
       )}
 
       <GameResultBox
-        isWin={Math.abs(finalMonsterHealth) <= 150}
+        isSuccess={finalMonsterHealth < 0 && finalMonsterHealth > -900}
         point={finalMonsterHealth}
         visible={isUseSmite}
       />

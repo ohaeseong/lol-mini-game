@@ -9,7 +9,7 @@ type Props = {
   className?: React.HtmlHTMLAttributes<HTMLDivElement>['className'];
   onClose?: () => void;
   visible: boolean;
-  isWin: boolean;
+  isSuccess: boolean;
   point: number;
 };
 
@@ -17,7 +17,7 @@ const GameResultBox: React.FC<Props> = ({
   className,
   onClose,
   visible,
-  isWin,
+  isSuccess,
   point,
 }: Props) => {
   const [summoner, setSummoner] = React.useState('');
@@ -48,24 +48,34 @@ const GameResultBox: React.FC<Props> = ({
         >
           <div className="flex flex-col rounded bg-white p-4">
             <span className="text-2xl font-bold text-brown-400">
-              {isWin ? 'WIN!' : 'LOSE..'}
+              {isSuccess ? 'SUCCESS!' : 'FAIL..'}
             </span>
             <span className="mt-4 inline-block text-lg">
               your point: {point}
             </span>
-            <input
-              className="mt-4 rounded border border-brown-400 py-1 pl-2 focus:outline-none"
-              placeholder="If you want to rank your point, Please write your LOL nick name."
-              onChange={handleSummoner}
-              value={summoner}
-            />
+            {isSuccess && (
+              <input
+                className="mt-4 rounded border border-brown-400 py-1 pl-2 focus:outline-none"
+                placeholder="If you want to rank your point, Please write your LOL nick name."
+                onChange={handleSummoner}
+                value={summoner}
+              />
+            )}
             <div className="mt-4 flex space-x-4">
-              <Button className="rounded" onClick={onReload}>
-                Retry
-              </Button>
-              <Button className="rounded" onClick={onRank}>
-                Rank
-              </Button>
+              {isSuccess ? (
+                <>
+                  <Button className="rounded" onClick={onReload}>
+                    Retry
+                  </Button>
+                  <Button className="rounded" onClick={onRank}>
+                    Rank
+                  </Button>
+                </>
+              ) : (
+                <Button className="rounded" onClick={onReload}>
+                  Retry
+                </Button>
+              )}
             </div>
           </div>
         </div>
