@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Rank } from './entities/rank.entity';
-import { CreateRankInput, UpdateRankInput } from './rank.input';
+import { Rank } from './entities/smite.rank.entity';
+import { CreateRankInput, UpdateRankInput } from './smite.rank.input';
 
 @Injectable()
 export class RankService {

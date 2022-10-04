@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { RankService } from './rank.service';
-import { RankResolver } from './rank.resolver';
+import { RankService } from './smite.rank_service';
+import { RankResolver } from './smite.rank.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Rank } from './entities/rank.entity';
+import { Rank } from './entities/smite.rank.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Rank])],

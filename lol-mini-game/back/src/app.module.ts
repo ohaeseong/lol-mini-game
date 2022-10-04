@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { RankModule } from './rank/rank.module';
+import { RankModule } from './rank/smite.rank.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Rank } from './rank/entities/rank.entity';
+import { Rank } from './rank/entities/smite.rank.entity';
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_USER } from 'config';
 import { join } from 'path';
 

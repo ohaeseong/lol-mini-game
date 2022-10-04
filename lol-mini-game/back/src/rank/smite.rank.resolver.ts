@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import { Rank } from './entities/rank.entity';
-import { CreateRankInput, UpdateRankInput } from './rank.input';
-import { RankService } from './rank.service';
+import { Rank } from './entities/smite.rank.entity';
+import { CreateRankInput, UpdateRankInput } from './smite.rank.input';
+import { RankService } from './smite.rank_service';
 
 @Resolver()
 export class RankResolver {
