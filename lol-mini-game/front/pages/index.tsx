@@ -1,16 +1,15 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import React, { useEffect } from 'react';
-import { MonsterType } from '../components/MonsterCard';
-import MonsterSelector from '../components/MonsterSelector';
+import ObjectList from '../components/ObjectList';
 import DefaultLayout from '../layouts/DefaultLayout';
 import Button from '../components/Button';
 import { useRouter } from 'next/router';
 import { getStorage } from '../utils/storage';
+import { ObjectType } from '../types/object';
 
 const Home: NextPage = () => {
   const [loading, setLoading] = React.useState(true);
-  const [monster, setMonster] = React.useState(MonsterType.DRAGON);
   const router = useRouter();
 
   useEffect(() => {
@@ -21,7 +20,7 @@ const Home: NextPage = () => {
   }, [loading]);
 
   return (
-    <DefaultLayout>
+    <DefaultLayout titleClassName="my-20">
       {loading ? (
         <>
           <Image src="/images/logo.png" width={500} height={200} alt="logo" />
@@ -36,8 +35,8 @@ const Home: NextPage = () => {
         </>
       ) : (
         <div className="flex flex-col items-center justify-center space-y-16">
-          <MonsterSelector selectedMonster={monster} onChange={handleMonster} />
-          <Button size="lg" onClick={linkToMonsterPage()}>
+          <ObjectList />
+          <Button size="lg" onClick={goToObjectPage()}>
             START
           </Button>
         </div>
@@ -45,21 +44,17 @@ const Home: NextPage = () => {
     </DefaultLayout>
   );
 
-  function handleMonster(monster: MonsterType) {
-    setMonster(monster);
-  }
-
-  function linkToMonsterPage(): () => void {
+  function goToObjectPage(): () => void {
     const smiteKey = getStorage('smite_key');
 
     if (!smiteKey) {
       return () => {
-        router.push(`/setting?${monster}`);
+        router.push(`/setting?${ObjectType.DRAGON}`);
       };
     }
 
     return () => {
-      router.push(`/monster?${monster}`);
+      router.push(`/smite?${ObjectType.DRAGON}`);
     };
   }
 };

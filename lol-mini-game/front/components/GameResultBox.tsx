@@ -1,23 +1,29 @@
 import React from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import Button from './Button';
 import { useRouter } from 'next/router';
-import { useAddRank } from '../mutations/rank';
+import { useAddRank } from '../mutations/smite.rank';
+import { MonsterType } from './ObjectCard';
+import { getNextLevel } from '../utils/object';
 
 type Props = {
   className?: React.HtmlHTMLAttributes<HTMLDivElement>['className'];
+  currentLevel: MonsterType;
   onClose?: () => void;
   visible: boolean;
   isSuccess: boolean;
+  isEnd: boolean;
   point: number;
 };
 
 const GameResultBox: React.FC<Props> = ({
   className,
+  currentLevel,
   onClose,
   visible,
   isSuccess,
+  isEnd,
   point,
 }: Props) => {
   const [summoner, setSummoner] = React.useState('');
@@ -53,7 +59,7 @@ const GameResultBox: React.FC<Props> = ({
             <span className="mt-4 inline-block text-lg">
               your point: {point}
             </span>
-            {isSuccess && (
+            {isEnd && isSuccess && (
               <input
                 className="mt-4 rounded border border-brown-400 py-1 pl-2 focus:outline-none"
                 placeholder="If you want to rank your point, Please write your LOL nick name."
@@ -67,8 +73,8 @@ const GameResultBox: React.FC<Props> = ({
                   <Button className="rounded" onClick={onReload}>
                     Retry
                   </Button>
-                  <Button className="rounded" onClick={onRank}>
-                    Rank
+                  <Button className="rounded" onClick={isEnd ? onRank : onNext}>
+                    {isEnd ? 'Rank' : 'Next'}
                   </Button>
                 </>
               ) : (
@@ -97,16 +103,40 @@ const GameResultBox: React.FC<Props> = ({
       return;
     }
 
+    const dragonPoint = Math.abs(
+      Number(sessionStorage.getItem(MonsterType.DRAGON))
+    );
+    const riftPoint = Math.abs(
+      Number(sessionStorage.getItem(MonsterType.RIFT_HERALD))
+    );
+    const baronPoint = Math.abs(
+      Number(sessionStorage.getItem(MonsterType.BARON_NASHOOR))
+    );
+    const elderPoint = Math.abs(Number(point));
+
     await addRank({
       variables: {
-        createRankData: {
-          score: point,
-          summoner,
+        createSmiteRankData: {
+          average: 0,
+          summoner: summoner,
+          dragon: dragonPoint,
+          rift_herald: riftPoint,
+          baron_nashoor: baronPoint,
+          elder_dragon: elderPoint,
         },
       },
     });
 
-    router.push('/rank');
+    await router.push('/smite_rank');
+  }
+
+  async function onNext() {
+    const nextLevel = getNextLevel(currentLevel) as MonsterType;
+
+    sessionStorage.setItem(currentLevel, point.toString());
+
+    await router.push(`/monster?${nextLevel}`);
+    await router.reload();
   }
 };
 

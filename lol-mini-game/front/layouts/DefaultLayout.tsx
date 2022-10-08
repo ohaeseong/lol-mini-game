@@ -3,21 +3,29 @@ import React from 'react';
 import Footer from '../components/Footer';
 
 type Props = {
+  titleClassName?: React.HtmlHTMLAttributes<HTMLDivElement>['className'];
   children: React.ReactNode;
   theme?: 'primary' | 'secondary';
+  background?: string;
 };
 
-const DefaultLayout: React.FC<Props> = ({ children, theme = 'primary' }) => {
+const DefaultLayout: React.FC<Props> = ({
+  titleClassName,
+  children,
+  theme = 'primary',
+  background,
+}) => {
   return (
     <div
       className="flex h-screen w-screen flex-col items-center justify-between bg-cover bg-no-repeat"
       style={{
-        backgroundImage: `url('${getBackgroundImage()}')`,
+        backgroundImage: `url('${background}')`,
       }}
     >
       <h1
         className={classNames(
-          'my-20 font-beaufort-bold text-2xl tracking-widest',
+          'font-beaufort-bold text-2xl tracking-widest',
+          titleClassName,
           {
             'text-brown-400': theme === 'primary',
             'text-white': theme === 'secondary',
@@ -27,18 +35,9 @@ const DefaultLayout: React.FC<Props> = ({ children, theme = 'primary' }) => {
         SMITE OF LEGENDS
       </h1>
       {children}
-
       <Footer isShowVersion={theme === 'primary'} />
     </div>
   );
-
-  function getBackgroundImage(): string {
-    if (theme === 'secondary') {
-      return '/images/backgrounds/background.png';
-    }
-
-    return '';
-  }
 };
 
 export default DefaultLayout;

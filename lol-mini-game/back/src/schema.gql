@@ -2,21 +2,29 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Rank {
+type SmiteRank {
   id: Int!
   summoner: String!
-  score: Int!
+  average: Int!
+  dragon: Int!
+  rift_herald: Int!
+  baron_nashoor: Int!
+  elder_dragon: Int!
 }
 
 type Query {
-  getRankList: [Rank!]!
+  getSmiteRankList: [SmiteRank!]!
 }
 
 type Mutation {
-  createRank(createRankData: CreateRankInput!): Rank!
+  upsertSmiteRank(upsertSmiteRankData: UpsertSmiteRankInput!): SmiteRank!
 }
 
-input CreateRankInput {
-  score: Float!
+input UpsertSmiteRankInput {
+  average: Float!
+  dragon: Float!
+  rift_herald: Float!
+  baron_nashoor: Float!
+  elder_dragon: Float!
   summoner: String!
 }

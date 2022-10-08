@@ -5,7 +5,7 @@ import React from 'react';
 import Image from 'next/image';
 import Button from '../components/Button';
 import Footer from '../components/Footer';
-import { useRanks } from '../queries/rank';
+import { useRanks } from '../queries/smite.rank';
 
 const TABLE_HEAD = [
   {
@@ -73,7 +73,7 @@ const RankContainer: NextPage = () => {
                   {index + 1}
                 </Td>
                 <Td index={index}>{rank.summoner}</Td>
-                <Td index={index}>{rank.score}</Td>
+                <Td index={index}>{rank.average}</Td>
               </tr>
             ))}
           </tbody>
