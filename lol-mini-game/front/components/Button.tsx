@@ -24,7 +24,7 @@ const Button: React.FC<Props> = ({
         'py-3 px-28': size === 'lg',
         'py-3 px-14': size === 'base',
         'py-3 px-10': size === 'sm',
-        'border-none bg-brown-300': type === 'default',
+        'border-none bg-brown-200': type === 'default',
         'h-20 w-20 px-0 py-0 font-beaufort-bold text-4xl': type === 'check',
         'bg-brown-200 text-white': type === 'check' && selected,
         'border-2 border-brown-200 text-brown-200':

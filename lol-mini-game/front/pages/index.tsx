@@ -49,12 +49,12 @@ const Home: NextPage = () => {
 
     if (!smiteKey) {
       return () => {
-        router.push(`/setting?${ObjectType.DRAGON}`);
+        router.push(`/setting`);
       };
     }
 
     return () => {
-      router.push(`/smite?${ObjectType.DRAGON}`);
+      router.push(`/smite`);
     };
   }
 };

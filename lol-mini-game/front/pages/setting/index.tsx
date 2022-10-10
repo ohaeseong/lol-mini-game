@@ -4,16 +4,17 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import DefaultLayout from '../../layouts/DefaultLayout';
+import { SmiteKey } from '../../types/game';
 import { ObjectType } from '../../types/object';
 import { getObjectLevel } from '../../utils/object';
 import { setStorage } from '../../utils/storage';
 
 const SettingPage: NextPage = () => {
-  const [smiteKey, setSmiteKey] = useState('D');
+  const [smiteKey, setSmiteKey] = useState('KeyD');
   const router = useRouter();
 
   useEffect(() => {
-    setStorage('smite_key', smiteKey);
+    setStorage('application:smite_key', smiteKey);
   }, [smiteKey, router]);
 
   return (
@@ -43,15 +44,15 @@ const SettingPage: NextPage = () => {
             <div className="flex space-x-3">
               <Button
                 type="check"
-                selected={smiteKey === 'D'}
-                onClick={handleSpellKey('D')}
+                selected={smiteKey === SmiteKey.D}
+                onClick={handleSpellKey(SmiteKey.D)}
               >
                 D
               </Button>
               <Button
                 type="check"
-                selected={smiteKey === 'F'}
-                onClick={handleSpellKey('F')}
+                selected={smiteKey === SmiteKey.F}
+                onClick={handleSpellKey(SmiteKey.F)}
               >
                 F
               </Button>
@@ -71,7 +72,7 @@ const SettingPage: NextPage = () => {
     </DefaultLayout>
   );
 
-  function handleSpellKey(key: 'D' | 'F'): () => void {
+  function handleSpellKey(key: SmiteKey): () => void {
     return () => {
       setSmiteKey(key);
     };
