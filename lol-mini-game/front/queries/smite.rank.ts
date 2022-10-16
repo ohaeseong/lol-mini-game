@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { ISmiteRank } from '../../common/types/Rank';
+import { ISmiteRank } from '../../common/types/SmiteRank';
 import client from '../client/apollo-client';
 import { GET_SMITE_RANK_LIST } from './smite.rank.queries';
 

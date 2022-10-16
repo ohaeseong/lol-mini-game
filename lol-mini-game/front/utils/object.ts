@@ -1,5 +1,7 @@
 import { ObjectType } from '../types/object';
 
+const MAX_LEVEL = 4;
+
 export type MinMax = {
   min: number;
   max: number;
@@ -12,9 +14,10 @@ type ObjectAbility = {
 };
 
 export function getNextLevel(object: ObjectType): number {
-  const nextLevel = getObjectLevel(object) + 1;
+  const nextLevel = getObjectLevel(object);
+  console.log(nextLevel);
 
-  return nextLevel > 4 ? -1 : nextLevel;
+  return nextLevel > MAX_LEVEL ? -1 : nextLevel;
 }
 
 export function getObjectAbility(object: ObjectType): ObjectAbility {

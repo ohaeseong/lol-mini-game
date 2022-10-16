@@ -1,50 +1,52 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { LegacyRef, PropsWithChildren } from 'react';
 import Footer from '../components/Footer';
 
-type Props = {
+type Props<T> = {
+  className?: React.HtmlHTMLAttributes<HTMLDivElement>['className'];
   titleClassName?: React.HtmlHTMLAttributes<HTMLDivElement>['className'];
   children: React.ReactNode;
   theme?: 'primary' | 'secondary';
+  hideFooterVersion?: boolean;
+  ref?: LegacyRef<T>;
   background?: string;
-  overlay?: boolean;
 };
 
-const DefaultLayout: React.FC<Props> = ({
+function DefaultLayout<T>({
+  className,
   titleClassName,
   children,
   theme = 'primary',
+  hideFooterVersion = false,
   background,
-  overlay = false,
-}) => {
+}: Props<T>) {
   return (
-    <>
-      {overlay && (
-        <div className="absolute z-40 h-full w-full bg-black opacity-50" />
+    <div
+      className={classNames(
+        'flex h-screen w-screen flex-col items-center justify-between bg-cover bg-no-repeat',
+        className
       )}
-      <div
-        className="flex h-screen w-screen flex-col items-center justify-between bg-cover bg-no-repeat"
-        style={{
-          backgroundImage: `url('${background}')`,
-        }}
+      style={{
+        backgroundImage: `url('${background}')`,
+      }}
+    >
+      <h1
+        className={classNames(
+          'z-40 font-beaufort-bold text-2xl tracking-widest',
+          titleClassName,
+          {
+            'text-brown-400': theme === 'primary',
+            'text-white': theme === 'secondary',
+          }
+        )}
       >
-        <h1
-          className={classNames(
-            'font-beaufort-bold text-2xl tracking-widest',
-            titleClassName,
-            {
-              'text-brown-400': theme === 'primary',
-              'text-white': theme === 'secondary',
-            }
-          )}
-        >
-          SMITE OF LEGENDS
-        </h1>
-        {children}
-        <Footer isShowVersion={theme === 'primary'} />
-      </div>
-    </>
+        SMITE OF LEGENDS
+      </h1>
+      <hr className="z-40 w-32 border-t border-white" />
+      {children}
+      <Footer hideVersion={hideFooterVersion} />
+    </div>
   );
-};
+}
 
 export default DefaultLayout;

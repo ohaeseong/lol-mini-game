@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Button from '../../components/Button';
+import CheckBox from '../../components/CheckBox';
 import DefaultLayout from '../../layouts/DefaultLayout';
 import { SmiteKey } from '../../types/game';
 import { ObjectType } from '../../types/object';
@@ -42,20 +43,18 @@ const SettingPage: NextPage = () => {
               alt="smite"
             />
             <div className="flex space-x-3">
-              <Button
-                type="check"
+              <CheckBox
                 selected={smiteKey === SmiteKey.D}
                 onClick={handleSpellKey(SmiteKey.D)}
               >
                 D
-              </Button>
-              <Button
-                type="check"
+              </CheckBox>
+              <CheckBox
                 selected={smiteKey === SmiteKey.F}
                 onClick={handleSpellKey(SmiteKey.F)}
               >
                 F
-              </Button>
+              </CheckBox>
             </div>
           </div>
           <p className="mt-4 mb-14 text-center font-beaufort-bold text-lg tracking-widest text-white">

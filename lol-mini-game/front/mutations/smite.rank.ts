@@ -1,36 +1,35 @@
 import { gql, useMutation } from '@apollo/client';
-import { ISmiteRank, ICreateSmiteRank } from '../../common/types/Rank';
+import { ISmiteRank, IUpsertSmiteRank } from '../../common/types/SmiteRank';
 import client from '../client/apollo-client';
 
-export const CREATE_SMITE_RANK = gql`
-  mutation CreateSmiteRank($createSmiteRankData: CreateSmiteRankInput!) {
-    createSmiteRank(createSmiteRankData: $createSmiteRankData) {
-      id
-      average
+export const UPSERT_SMITE_RANK = gql`
+  mutation UpsertSmiteRank($upsertSmiteRankData: UpsertSmiteRankInput!) {
+    upsertSmiteRank(upsertSmiteRankData: $upsertSmiteRankData) {
+      summoner
       dragon
       rift_herald
       baron_nashoor
       elder_dragon
-      summoner
+      average
     }
   }
 `;
 
-export interface CreateSmiteRankParams {
-  createSmiteRankData: ICreateSmiteRank;
+export interface IUpsertSmiteRankParams {
+  upsertSmiteRankData: IUpsertSmiteRank;
 }
 
-export function useAddRank() {
-  const [addRank, { data, ...rest }] = useMutation<
+export function useUpsertSmiteRank() {
+  const [upsertSmiteRank, { data, ...rest }] = useMutation<
     { rank: ISmiteRank },
-    CreateSmiteRankParams
-  >(CREATE_SMITE_RANK, {
+    IUpsertSmiteRankParams
+  >(UPSERT_SMITE_RANK, {
     client,
   });
 
   return {
-    addRank,
-    ranks: data?.rank,
+    upsertSmiteRank,
+    rank: data?.rank,
     ...rest,
   };
 }

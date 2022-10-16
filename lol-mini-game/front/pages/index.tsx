@@ -36,7 +36,7 @@ const Home: NextPage = () => {
       ) : (
         <div className="flex flex-col items-center justify-center space-y-16">
           <ObjectList />
-          <Button size="lg" onClick={goToObjectPage()}>
+          <Button size="xl" onClick={goToObjectPage()}>
             START
           </Button>
         </div>

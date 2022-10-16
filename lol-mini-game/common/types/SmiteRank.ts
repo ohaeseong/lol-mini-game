@@ -8,7 +8,7 @@ export interface ISmiteRank {
   summoner: string;
 }
 
-export interface ICreateSmiteRank {
+export interface IUpsertSmiteRank {
   average: number;
   dragon: number;
   rift_herald: number;
