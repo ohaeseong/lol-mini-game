@@ -51,7 +51,7 @@ const ScoreBoard: React.FC<Props> = ({ className, size = 'base', scores }) => {
             'tracking-wider': size === 'lg',
           })}
         >
-          {displayNumberSign(sum(scores))}
+          {displayNumberSign(sum(scores) / 4)}
         </span>
       </div>
     </div>

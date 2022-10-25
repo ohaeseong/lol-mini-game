@@ -312,14 +312,11 @@ const SmiteContainer: React.FC = () => {
 
   function removeCurrentLevelScore() {
     setScores((prev) => {
-      const next =
-        prev.length < getObjectLevel(object)
-          ? [...prev]
-          : remove(prev, (_score, index) => {
-              return index === getObjectLevel(object) - 1;
-            });
+      remove(prev, (_score, index) => {
+        return index === getObjectLevel(object) - 1;
+      });
 
-      return next;
+      return prev;
     });
   }
 
@@ -333,10 +330,7 @@ const SmiteContainer: React.FC = () => {
         setFail(true);
       } else {
         setScores((prev) => {
-          const next =
-            prev.length >= getObjectLevel(object)
-              ? [...prev]
-              : [...prev, nextHP];
+          const next = [...prev, nextHP];
 
           return next;
         });
