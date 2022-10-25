@@ -48,7 +48,7 @@ const RankContainer: NextPage = () => {
         HOME
       </Button>
 
-      <Footer />
+      <Footer hideVersion />
     </div>
   );
 

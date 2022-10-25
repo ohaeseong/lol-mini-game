@@ -19,6 +19,7 @@ import {
 import { getStorage } from '../utils/storage';
 import { useUpsertSmiteRank } from '../mutations/smite.rank';
 import { useRouter } from 'next/router';
+import { remove, sum } from 'lodash';
 
 const SmiteContainer: React.FC = () => {
   const [object, setObject] = React.useState(ObjectType.DRAGON);
@@ -31,20 +32,48 @@ const SmiteContainer: React.FC = () => {
 
   const [ready, setReady] = React.useState(false);
   const [end, setEnd] = React.useState(false);
+  const [fail, setFail] = React.useState(false);
 
   const [HP, setHP] = React.useState(defaultHP);
   const [smiteKey, setSmiteKey] = React.useState<SmiteKey>(SmiteKey.D);
 
+  const nextLevel = Object.values(ObjectType)[getNextLevel(object)];
+
   const [scores, setScores] = React.useState<Array<number>>([]);
 
-  const [visible, setVisible] = React.useState(false);
+  const [modalVisible, setModalVisible] = React.useState(false);
   const [summoner, setSummoner] = React.useState('');
 
+  const { upsertSmiteRank } = useUpsertSmiteRank();
   const gameScreenRef = React.useRef(null);
-  const { upsertSmiteRank, error } = useUpsertSmiteRank();
   const currentLevel = getObjectLevel(object);
 
   const router = useRouter();
+
+  React.useEffect(() => {
+    const confirmMessage =
+      '게임이 진행 중 입니다. 새로고침/페이지 이동 시 점수가 초기화 될 수 있습니다.';
+
+    function handleCloseWindow(e: any) {
+      e.preventDefault();
+      return (e.returnValue = confirmMessage);
+    }
+
+    function handleAbort() {
+      if (!window.confirm(confirmMessage)) {
+        router.events.emit('routeChangeError', 'cancelRoute');
+        throw 'cancelRoute';
+      }
+    }
+
+    router.events.on('beforeHistoryChange', handleAbort);
+    window.addEventListener('beforeunload', handleCloseWindow);
+
+    return () => {
+      router.events.off('beforeHistoryChange', handleAbort);
+      window.removeEventListener('beforeunload', handleCloseWindow);
+    };
+  }, [router.events]);
 
   React.useEffect(() => {
     if (!ready || end) return;
@@ -54,7 +83,7 @@ const SmiteContainer: React.FC = () => {
 
         if (nextHP <= 0) {
           setEnd(true);
-          setScores(scores.concat([0]));
+          setFail(true);
 
           return 0;
         }
@@ -66,15 +95,25 @@ const SmiteContainer: React.FC = () => {
     }, getRandomNumber(attackSpeedRange.min, attackSpeedRange.max));
 
     return () => clearTimeout(timeout);
-  }, [ready, HP, end, object]);
+  }, [
+    ready,
+    HP,
+    end,
+    object,
+    attackSpeedRange.min,
+    attackSpeedRange.max,
+    ATKRange.min,
+    ATKRange.max,
+    currentLevel,
+  ]);
 
   React.useEffect(() => {
     setHP(defaultHP);
     gameScreenRef.current.focus();
-  }, [object, defaultHP]);
+  }, [object, defaultHP, ready]);
 
   React.useEffect(() => {
-    setSmiteKey(getStorage('application:smite_key'));
+    setSmiteKey(getStorage('application:smite_key') || SmiteKey.D);
   }, []);
 
   return (
@@ -114,7 +153,114 @@ const SmiteContainer: React.FC = () => {
             <span className="mt-5 font-bold tracking-wider">GAME RESULT</span>
           )}
         </div>
-        {!end ? (
+        {end ? (
+          <>
+            {fail ? (
+              <div className="relative z-40 flex h-full w-full flex-col items-center justify-around">
+                <h1 className="text-6xl font-bold tracking-widest text-white">
+                  FAIL
+                </h1>
+
+                <Button
+                  className="text-sm font-bold tracking-wider"
+                  size="lg"
+                  onClick={retryGame}
+                >
+                  RETRY
+                </Button>
+              </div>
+            ) : nextLevel ? (
+              <div className="relative z-40 flex h-full w-full flex-col items-center justify-around">
+                <h1 className="text-6xl font-bold tracking-widest text-white">
+                  COMPLETE
+                </h1>
+
+                <div className="flex flex-col items-center justify-center">
+                  <span className="font-bold tracking-wider text-white">
+                    DAMAGE
+                  </span>
+                  <div className="border-b border-white px-6 pt-4 pb-3">
+                    <span className="text-4xl font-bold tracking-wider text-white">
+                      {displayNumberSign(
+                        scores[getObjectLevel(object) - 1]
+                      ).replace(' ', '')}
+                    </span>
+                  </div>
+                </div>
+
+                <ScoreBoard
+                  className="absolute right-40 top-0"
+                  scores={scores}
+                />
+
+                <Button
+                  className="text-sm font-bold tracking-wider"
+                  size="lg"
+                  onClick={setNextLevel}
+                >
+                  NEXT GAME
+                </Button>
+
+                <Button
+                  className="text-sm font-bold"
+                  theme="clear"
+                  onClick={retryGame}
+                >
+                  RETRY
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Modal
+                  title="SUMMONER NAME"
+                  visible={modalVisible}
+                  onClose={toggleModal}
+                >
+                  <Separator
+                    className="mb-10 mt-5 stroke-brown-400"
+                    src="/images/separator.svg"
+                    width={320}
+                    height={20}
+                    alt="separator"
+                  />
+
+                  <div className="mt-2">
+                    <input
+                      className="h-10 w-full border-none bg-light-gray-100 pl-2 outline-none"
+                      value={summoner}
+                      onChange={(e) => {
+                        setSummoner(e.target.value);
+                      }}
+                    />
+                  </div>
+
+                  <Button className="mt-7" size="lg" onClick={onRankScore}>
+                    REGISTRATION
+                  </Button>
+                </Modal>
+                <div className="z-40 flex h-full w-full flex-col items-center justify-center">
+                  <ScoreBoard size="lg" scores={scores} />
+
+                  <Button
+                    className="mt-20 text-sm font-bold tracking-widest"
+                    size="lg"
+                    onClick={toggleModal}
+                  >
+                    RANKING REGISTRATION
+                  </Button>
+
+                  <Button
+                    className="mt-32 text-sm font-bold"
+                    theme="clear"
+                    onClick={retryGame}
+                  >
+                    RETRY
+                  </Button>
+                </div>
+              </>
+            )}
+          </>
+        ) : (
           <div className="flex h-full w-full flex-col items-center justify-between">
             <HealthBar progressValue={(HP / defaultHP) * 100} health={HP} />
 
@@ -134,83 +280,6 @@ const SmiteContainer: React.FC = () => {
               />
             </div>
           </div>
-        ) : !!Object.values(ObjectType)[getNextLevel(object)] ? (
-          <div className="relative z-40 flex w-full flex-col items-center">
-            <h1 className="text-6xl font-bold tracking-widest text-white">
-              COMPLETE
-            </h1>
-
-            <span className="mt-11 font-bold tracking-wider text-white">
-              DAMAGE
-            </span>
-            <div className="border-b border-white px-6 pt-4 pb-3">
-              <span className="text-4xl font-bold tracking-wider text-white">
-                {displayNumberSign(scores[getObjectLevel(object) - 1]).replace(
-                  ' ',
-                  ''
-                )}
-              </span>
-            </div>
-
-            <ScoreBoard className="absolute right-40" scores={scores} />
-
-            <Button
-              className="mt-20 text-sm font-bold tracking-wider"
-              size="lg"
-              onClick={setNextLevel}
-            >
-              NEXT GAME
-            </Button>
-
-            <Button className="mt-52 text-sm font-bold" theme="clear">
-              HOME
-            </Button>
-          </div>
-        ) : (
-          <>
-            <Modal
-              title="SUMMONER NAME"
-              visible={visible}
-              onClose={toggleModal}
-            >
-              <Separator
-                className="mb-10 mt-5 stroke-brown-400"
-                src="/images/separator.svg"
-                width={320}
-                height={20}
-                alt="separator"
-              />
-
-              <div className="mt-2">
-                <input
-                  className="h-10 w-full border-none bg-light-gray-100 pl-2 outline-none"
-                  value={summoner}
-                  onChange={(e) => {
-                    setSummoner(e.target.value);
-                  }}
-                />
-              </div>
-
-              <Button className="mt-7" size="lg" onClick={onRankScore}>
-                REGISTRATION
-              </Button>
-            </Modal>
-            <div className="z-40 flex h-full w-full flex-col items-center justify-center">
-              <ScoreBoard size="lg" scores={scores} />
-
-              <Button
-                className="mt-20 text-sm font-bold tracking-widest"
-                size="lg"
-                onClick={toggleModal}
-              >
-                RANKING REGISTRATION
-              </Button>
-
-              <Button className="mt-32 text-sm font-bold" theme="clear">
-                HOME
-              </Button>
-            </div>
-          </>
         )}
       </div>
     </DefaultLayout>
@@ -228,22 +297,50 @@ const SmiteContainer: React.FC = () => {
     resetGameState();
   }
 
+  function retryGame() {
+    resetGameState();
+    removeCurrentLevelScore();
+  }
+
   function resetGameState() {
     setReady(false);
     setEnd(false);
+    setFail(false);
+  }
+
+  function removeCurrentLevelScore() {
+    setScores((prev) => {
+      const next =
+        prev.length < getObjectLevel(object)
+          ? [...prev]
+          : remove(prev, (_score, index) => {
+              return index === getObjectLevel(object) - 1;
+            });
+
+      return next;
+    });
   }
 
   function onSmite(e: React.KeyboardEvent<HTMLDivElement>) {
     if (end || e.code !== smiteKey || !ready) return;
 
-    setEnd(true);
-
     setHP((prevHP) => {
       const nextHP = prevHP - 900;
 
-      setScores(scores.concat([nextHP]));
+      if (nextHP > 0) {
+        setFail(true);
+      } else {
+        setScores((prev) => {
+          const next =
+            prev.length >= getObjectLevel(object)
+              ? [...prev]
+              : [...prev, nextHP];
 
-      if (nextHP <= 0) return 0;
+          return next;
+        });
+      }
+
+      setEnd(true);
 
       return nextHP;
     });
@@ -256,7 +353,7 @@ const SmiteContainer: React.FC = () => {
       rift_herald: scores[1],
       baron_nashoor: scores[2],
       elder_dragon: scores[3],
-      average: 0,
+      average: sum(scores) / 4,
     };
 
     await upsertSmiteRank({
@@ -269,7 +366,7 @@ const SmiteContainer: React.FC = () => {
   }
 
   function toggleModal() {
-    setVisible(!visible);
+    setModalVisible(!modalVisible);
   }
 
   function foucsOnGameScreenElement() {

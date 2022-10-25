@@ -6,7 +6,6 @@ import DefaultLayout from '../layouts/DefaultLayout';
 import Button from '../components/Button';
 import { useRouter } from 'next/router';
 import { getStorage } from '../utils/storage';
-import { ObjectType } from '../types/object';
 
 const Home: NextPage = () => {
   const [loading, setLoading] = React.useState(true);
@@ -45,7 +44,7 @@ const Home: NextPage = () => {
   );
 
   function goToObjectPage(): () => void {
-    const smiteKey = getStorage('smite_key');
+    const smiteKey = getStorage('application:smite_key');
 
     if (!smiteKey) {
       return () => {

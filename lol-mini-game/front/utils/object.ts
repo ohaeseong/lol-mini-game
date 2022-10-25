@@ -15,7 +15,6 @@ type ObjectAbility = {
 
 export function getNextLevel(object: ObjectType): number {
   const nextLevel = getObjectLevel(object);
-  console.log(nextLevel);
 
   return nextLevel > MAX_LEVEL ? -1 : nextLevel;
 }
@@ -26,7 +25,7 @@ export function getObjectAbility(object: ObjectType): ObjectAbility {
       return {
         HP: 3500,
         ATKRange: {
-          min: 0,
+          min: 1,
           max: 300,
         },
         attackSpeedRange: {
