@@ -349,7 +349,7 @@ const SmiteContainer: React.FC = () => {
       rift_herald: scores[1],
       baron_nashoor: scores[2],
       elder_dragon: scores[3],
-      average: sum(scores) / 4,
+      average: Math.ceil(sum(scores) / 4),
     };
 
     await upsertSmiteRank({

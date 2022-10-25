@@ -22,12 +22,22 @@ export class SmiteRankService {
   }
 
   async upsertSmiteRank(rank: UpsertSmiteRankInput): Promise<SmiteRank> {
-    const newRank = await this.rankRepo.upsert(rank, ['id', 'summoner']);
-
-    return this.rankRepo.findOne({
+    const prevRank = await this.rankRepo.findOne({
       where: {
-        id: newRank.identifiers[0].id,
+        summoner: rank.summoner,
       },
     });
+
+    if (prevRank.average > rank.average) {
+      return prevRank;
+    } else {
+      const newRank = await this.rankRepo.upsert(rank, ['id', 'summoner']);
+
+      return await this.rankRepo.findOne({
+        where: {
+          id: newRank.identifiers[0].id,
+        },
+      });
+    }
   }
 }
