@@ -59,7 +59,9 @@ const SmiteContainer: React.FC = () => {
       return (e.returnValue = confirmMessage);
     }
 
-    function handleAbort() {
+    function handleAbort(page) {
+      if (page === '/smite_rank') return;
+
       if (!window.confirm(confirmMessage)) {
         router.events.emit('routeChangeError', 'cancelRoute');
         throw 'cancelRoute';
