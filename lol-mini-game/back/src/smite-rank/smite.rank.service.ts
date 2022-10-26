@@ -28,7 +28,7 @@ export class SmiteRankService {
       },
     });
 
-    if (prevRank.average > rank.average) {
+    if (prevRank?.average > rank.average) {
       return prevRank;
     } else {
       const newRank = await this.rankRepo.upsert(rank, ['id', 'summoner']);
