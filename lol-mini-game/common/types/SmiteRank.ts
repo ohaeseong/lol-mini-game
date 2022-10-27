@@ -6,6 +6,9 @@ export interface ISmiteRank {
   baron_nashoor: number;
   elder_dragon: number;
   summoner: string;
+  count: number;
+  updated_at: Date;
+  created_at: Date;
 }
 
 export interface IUpsertSmiteRank {

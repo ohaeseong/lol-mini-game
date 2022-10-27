@@ -20,6 +20,7 @@ import { getStorage } from '../utils/storage';
 import { useUpsertSmiteRank } from '../mutations/smite.rank';
 import { useRouter } from 'next/router';
 import { remove, sum } from 'lodash';
+import classNames from 'classnames';
 
 const SmiteContainer: React.FC = () => {
   const [object, setObject] = React.useState(ObjectType.DRAGON);
@@ -123,7 +124,11 @@ const SmiteContainer: React.FC = () => {
       className="relative"
       titleClassName="mb-4 mt-8"
       theme="secondary"
-      background="/images/backgrounds/background.png"
+      background={
+        currentLevel === 1 || currentLevel === 4
+          ? '/images/backgrounds/background.png'
+          : '/images/backgrounds/background_2.png'
+      }
       hideFooterVersion
     >
       {(!ready || end) && (
@@ -158,7 +163,7 @@ const SmiteContainer: React.FC = () => {
         {end ? (
           <>
             {fail ? (
-              <div className="relative z-40 flex h-full w-full flex-col items-center justify-around">
+              <div className="relative z-40 flex h-full w-full animate-fade-in flex-col items-center justify-around">
                 <h1 className="text-6xl font-bold tracking-widest text-white">
                   FAIL
                 </h1>
@@ -172,7 +177,7 @@ const SmiteContainer: React.FC = () => {
                 </Button>
               </div>
             ) : nextLevel ? (
-              <div className="relative z-40 flex h-full w-full flex-col items-center justify-around">
+              <div className="relative z-40 flex h-full w-full animate-fade-in flex-col items-center justify-around">
                 <h1 className="text-6xl font-bold tracking-widest text-white">
                   COMPLETE
                 </h1>
@@ -266,20 +271,34 @@ const SmiteContainer: React.FC = () => {
           <div className="flex h-full w-full flex-col items-center justify-between">
             <HealthBar progressValue={(HP / defaultHP) * 100} health={HP} />
 
-            <ObjectImage object={object} width={280} height={280} />
+            <div
+              className={classNames({
+                'ml-40':
+                  ObjectType.ELDER_DRAGON === object ||
+                  ObjectType.DRAGON === object,
+              })}
+            >
+              <ObjectImage object={object} width={350} height={350} />
+            </div>
 
-            <div className="relative flex h-14 w-14 items-center justify-center">
-              <span className="absolute z-20 font-beaufort-bold text-3xl text-white">
-                {smiteKey.replace(/Key/, '')}
-              </span>
-              <div className="absolute z-10 h-full w-full bg-red-100 opacity-30" />
-              <Image
-                className="absolute"
-                src="/images/icon/smite.png"
-                width={70}
-                height={70}
-                alt="smite"
-              />
+            <div>
+              <div className="relative flex h-14 w-14 items-center justify-center">
+                <span className="absolute z-20 font-beaufort-bold text-3xl text-white">
+                  {smiteKey.replace(/Key/, '')}
+                </span>
+                <div className="absolute z-10 h-full w-full bg-red-100 opacity-30" />
+                <Image
+                  className="absolute"
+                  src="/images/icon/smite.png"
+                  width={70}
+                  height={70}
+                  alt="smite"
+                />
+              </div>
+
+              <div className="w-full text-center font-beaufort-bold text-xl text-white">
+                {900}
+              </div>
             </div>
           </div>
         )}

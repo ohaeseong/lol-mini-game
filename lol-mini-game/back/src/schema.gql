@@ -10,7 +10,15 @@ type SmiteRank {
   rift_herald: Int!
   baron_nashoor: Int!
   elder_dragon: Int!
+  count: Int!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Query {
   getSmiteRankList: [SmiteRank!]!

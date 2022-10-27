@@ -15,7 +15,9 @@ export class SmiteRankService {
     const ranks = await this.rankRepo.find({
       order: {
         average: 'DESC',
+        updated_at: 'ASC',
       },
+      take: 10,
     });
 
     return ranks;
@@ -28,10 +30,16 @@ export class SmiteRankService {
       },
     });
 
-    if (prevRank?.average > rank.average) {
+    if (prevRank?.average >= rank.average) {
       return prevRank;
     } else {
-      const newRank = await this.rankRepo.upsert(rank, ['id', 'summoner']);
+      const _rank = {
+        ...rank,
+        count: (prevRank?.count ? prevRank?.count : 0) + 1,
+        updated_at: new Date(),
+      };
+
+      const newRank = await this.rankRepo.upsert(_rank, ['id', 'summoner']);
 
       return await this.rankRepo.findOne({
         where: {

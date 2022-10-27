@@ -1,10 +1,10 @@
-import classNames from 'classnames';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Image from 'next/image';
 import Button from '../components/Button';
 import Footer from '../components/Footer';
+import dayjs from 'dayjs';
 import { useRanks } from '../queries/smite.rank';
 import Table from '../components/Table';
 import { ISmiteRank } from '../../common/types/SmiteRank';
@@ -16,26 +16,28 @@ const RankContainer: NextPage = () => {
   const columns = useColumns();
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
-      <h1 className="mt-20 mb-5 font-beaufort-bold text-2xl tracking-widest text-brown-400">
-        SMITE OF LEGENDS
-      </h1>
+    <div className="flex min-h-screen flex-col items-center justify-around">
+      <div className="flex flex-col items-center justify-center">
+        <h1 className="mt-20 mb-5 font-beaufort-bold text-2xl tracking-widest text-brown-400">
+          SMITE OF LEGENDS
+        </h1>
 
-      <hr className="mb-5 w-32 border-light-gray-100" />
+        <hr className="mb-5 w-32 border-light-gray-100" />
 
-      <h1 className="mt-0 mb-10 font-beaufort-bold text-xl tracking-widest">
-        RANKING
-      </h1>
+        <h1 className="mt-0 mb-10 font-beaufort-bold text-xl tracking-widest">
+          RANKING
+        </h1>
 
-      <Image
-        src="/images/logos/opgg_logo.webp"
-        width={300}
-        height={200}
-        alt="opgg_logo"
-      />
-      <span className="text-lg font-bold text-gray-200">
-        Any other thoughts while playing?
-      </span>
+        <Image
+          src="/images/logos/opgg_logo.webp"
+          width={300}
+          height={200}
+          alt="opgg_logo"
+        />
+        <span className="text-lg font-bold text-gray-200">
+          Any other thoughts while playing?
+        </span>
+      </div>
 
       <Table<ISmiteRank>
         className="mt-6 mb-20"
@@ -119,6 +121,40 @@ function useColumns(): Column<ISmiteRank>[] {
       value: (value) => value.elder_dragon,
       render: (value) => {
         return <span>{value.elder_dragon}</span>;
+      },
+    },
+    {
+      key: 'count',
+      label: 'Challenge Count',
+      className: 'w-40 text-center pt-5',
+      headClassName: 'w-40 text-center',
+      value: (value) => value.count,
+      render: (value) => {
+        return <span>{value.count}</span>;
+      },
+    },
+    {
+      key: 'updated_at',
+      label: 'Updated At',
+      className: 'w-40 text-center pt-5',
+      headClassName: 'w-40 text-center',
+      value: (value) => value.updated_at,
+      render: (value) => {
+        return (
+          <span>{dayjs(value.updated_at).format('YYYY-MM-DD hh:mm:ss')}</span>
+        );
+      },
+    },
+    {
+      key: 'created_at',
+      label: 'Created At',
+      className: 'w-40 text-center pt-5',
+      headClassName: 'w-40 text-center',
+      value: (value) => value.created_at,
+      render: (value) => {
+        return (
+          <span>{dayjs(value.created_at).format('YYYY-MM-DD hh:mm:ss')}</span>
+        );
       },
     },
   ];

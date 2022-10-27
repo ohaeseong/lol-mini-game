@@ -5,7 +5,6 @@ import ObjectList from '../components/ObjectList';
 import DefaultLayout from '../layouts/DefaultLayout';
 import Button from '../components/Button';
 import { useRouter } from 'next/router';
-import { getStorage } from '../utils/storage';
 
 const Home: NextPage = () => {
   const [loading, setLoading] = React.useState(true);
@@ -35,7 +34,7 @@ const Home: NextPage = () => {
       ) : (
         <div className="flex flex-col items-center justify-center space-y-16">
           <ObjectList />
-          <Button size="xl" onClick={goToObjectPage()}>
+          <Button size="xl" onClick={goToSettingPage()}>
             START
           </Button>
         </div>
@@ -43,17 +42,9 @@ const Home: NextPage = () => {
     </DefaultLayout>
   );
 
-  function goToObjectPage(): () => void {
-    const smiteKey = getStorage('application:smite_key');
-
-    if (!smiteKey) {
-      return () => {
-        router.push(`/setting`);
-      };
-    }
-
+  function goToSettingPage(): () => void {
     return () => {
-      router.push(`/smite`);
+      router.push(`/setting`);
     };
   }
 };

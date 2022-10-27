@@ -17,6 +17,11 @@ const ObjectImage: React.FC<Props> = ({
   width = 160,
   height = 160,
 }) => {
+  if (object === ObjectType.RIFT_HERALD) {
+    width = width - 100;
+    height = height - 100;
+  }
+
   return (
     <Image
       className={classNames('object-contain', className)}

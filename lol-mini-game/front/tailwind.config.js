@@ -45,7 +45,19 @@ module.exports = {
         animation: {
           progress: 'progress 5s ease-in-out',
         },
+        fadein: {
+          from: {
+            opacity: 0,
+          },
+          to: {
+            opacity: 1,
+          },
+        },
       },
+
+      animation: {
+        "fade-in": "fadein 1s ease-in-out"
+      }
     },
   },
   plugins: [],

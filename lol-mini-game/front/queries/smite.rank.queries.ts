@@ -10,6 +10,9 @@ export const GET_SMITE_RANK_LIST = gql`
       rift_herald
       baron_nashoor
       elder_dragon
+      count
+      updated_at
+      created_at
     }
   }
 `;
