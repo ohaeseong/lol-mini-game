@@ -27,7 +27,7 @@ const ObjectCard: React.FC<Props> = ({ className, object }: Props) => {
           </span>
         </div>
         <div className="flex h-60 justify-center">
-          <ObjectImage object={object} />
+          <ObjectImage object={object} resize={false} />
         </div>
       </div>
     </>

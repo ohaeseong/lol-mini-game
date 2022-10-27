@@ -9,6 +9,7 @@ type Props = {
   object: ObjectType;
   width?: number;
   height?: number;
+  type?: 'home' | 'game';
 };
 
 const ObjectImage: React.FC<Props> = ({
@@ -16,10 +17,19 @@ const ObjectImage: React.FC<Props> = ({
   object,
   width = 160,
   height = 160,
+  type = 'home',
 }) => {
-  if (object === ObjectType.RIFT_HERALD) {
+  if (object === ObjectType.RIFT_HERALD && type === 'game') {
     width = width - 100;
     height = height - 100;
+  }
+
+  if (
+    (object === ObjectType.DRAGON || object === ObjectType.ELDER_DRAGON) &&
+    type === 'home'
+  ) {
+    width = width + 50;
+    height = height + 50;
   }
 
   return (
