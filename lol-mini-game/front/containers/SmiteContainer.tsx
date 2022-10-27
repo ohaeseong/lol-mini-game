@@ -278,7 +278,12 @@ const SmiteContainer: React.FC = () => {
                   ObjectType.DRAGON === object,
               })}
             >
-              <ObjectImage object={object} width={350} height={350} />
+              <ObjectImage
+                object={object}
+                width={350}
+                height={350}
+                type="game"
+              />
             </div>
 
             <div>
