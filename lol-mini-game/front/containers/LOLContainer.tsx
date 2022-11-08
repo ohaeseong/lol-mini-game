@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import Box from '../components/Box';
+import ChampionModel from '../components/ChampionModel';
 import ModelLoader from '../components/ModelLoader';
 import SummonerRiftMap from '../components/SummonerRiftMap';
 import { ICoordinate } from '../types/game';
@@ -16,7 +16,7 @@ const LOLContainer: React.FC = () => {
   return (
     <Suspense fallback={<ModelLoader />}>
       <ambientLight />
-      <Box position={Object.values(coordinate)} />
+      <ChampionModel position={Object.values(coordinate)} />
       <SummonerRiftMap onClick={handleClickMap} />
     </Suspense>
   );
