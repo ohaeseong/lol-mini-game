@@ -43,7 +43,7 @@ module.exports = {
           to: { width: '100%' },
         },
         animation: {
-          progress: 'progress 5s ease-in-out',
+          progress: 'progress 3s ease-in-out',
         },
         fadein: {
           from: {
@@ -56,8 +56,8 @@ module.exports = {
       },
 
       animation: {
-        "fade-in": "fadein 1s ease-in-out"
-      }
+        'fade-in': 'fadein 1s ease-in-out',
+      },
     },
   },
   plugins: [],
