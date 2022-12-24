@@ -353,11 +353,8 @@ const SmiteContainer: React.FC = () => {
       if (nextHP > 0) {
         setFail(true);
       } else {
-        setScores((prev) => {
-          const next = [...prev, nextHP];
-
-          return next;
-        });
+        const test = [...scores, nextHP];
+        setScores(test);
       }
 
       setEnd(true);
