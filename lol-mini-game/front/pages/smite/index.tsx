@@ -1,52 +1,9 @@
 import type { NextPage } from 'next';
-import Image from 'next/image';
-import React, { useEffect } from 'react';
-import ObjectList from '../../components/ObjectList';
-import DefaultLayout from '../../layouts/DefaultLayout';
-import Button from '../../components/Button';
-import { useRouter } from 'next/router';
+import React from 'react';
+import SmiteContainer from '../../containers/SmiteContainer';
 
-const Home: NextPage = () => {
-  const [loading, setLoading] = React.useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (loading === false) return;
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }, [loading]);
-
-  return (
-    <DefaultLayout titleClassName="my-20">
-      {loading ? (
-        <>
-          <Image src="/images/logo.png" width={500} height={200} alt="logo" />
-          <div className="relative flex w-1/4 overflow-hidden rounded">
-            <div className="flex-1 -rotate-180 ">
-              <div className="animate-[progress_5s_ease-in-out] border border-brown-300" />
-            </div>
-            <div className="flex-1">
-              <div className="animate-[progress_5s_ease-in-out] border border-brown-300" />
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="flex flex-col items-center justify-center space-y-16">
-          <ObjectList />
-          <Button size="xl" onClick={goToSettingPage()}>
-            START
-          </Button>
-        </div>
-      )}
-    </DefaultLayout>
-  );
-
-  function goToSettingPage(): () => void {
-    return () => {
-      router.push(`/setting`);
-    };
-  }
+const SmitePage: NextPage = () => {
+  return <SmiteContainer />;
 };
 
-export default Home;
+export default SmitePage;
