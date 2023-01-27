@@ -4,7 +4,7 @@ const client = new ApolloClient({
   uri:
     process.env.NODE_ENV !== 'production'
       ? 'http://localhost:4002/graphql'
-      : process.env.SERVER_URL,
+      : 'https://minigame.our.gg/graphql',
   cache: new InMemoryCache(),
 });
 
