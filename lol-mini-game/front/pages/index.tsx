@@ -11,9 +11,16 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
+    const loaded = sessionStorage.getItem('load');
+    if (loaded === 'true') {
+      setLoading(false);
+    }
+
     if (loading === false) return;
+
     setTimeout(() => {
       setLoading(false);
+      sessionStorage.setItem('load', 'true');
     }, 5000);
   }, [loading]);
 
