@@ -32,12 +32,24 @@ const Home: NextPage = () => {
           </div>
         </>
       ) : (
-        <div className="flex flex-col items-center justify-center space-y-16">
-          <ObjectList />
-          <Button size="xl" onClick={goToSettingPage()}>
-            START
-          </Button>
-        </div>
+        <>
+          <div className="flex flex-col items-center justify-center space-y-16">
+            <ObjectList />
+            <div>
+              <Button size="base" onClick={goToSettingPage()}>
+                START
+              </Button>
+              <Button
+                size="base"
+                theme="clear"
+                className="ml-2"
+                onClick={goToSmiteRankPage()}
+              >
+                RANK
+              </Button>
+            </div>
+          </div>
+        </>
       )}
     </DefaultLayout>
   );
@@ -45,6 +57,12 @@ const Home: NextPage = () => {
   function goToSettingPage(): () => void {
     return () => {
       router.push(`/setting`);
+    };
+  }
+
+  function goToSmiteRankPage(): () => void {
+    return () => {
+      router.push(`/smite_rank`);
     };
   }
 };
