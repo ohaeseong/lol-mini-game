@@ -23,7 +23,10 @@ function DefaultLayout<T>({
   return (
     <div
       className={classNames(
-        'flex h-screen w-screen flex-col items-center justify-between bg-black-200 bg-cover bg-center bg-no-repeat object-contain',
+        'flex h-screen w-screen flex-col items-center justify-between bg-cover bg-center bg-no-repeat object-contain',
+        {
+          'bg-black-200': background,
+        },
         className
       )}
       style={{
