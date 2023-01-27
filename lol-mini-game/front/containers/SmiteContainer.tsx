@@ -208,13 +208,22 @@ const SmiteContainer: React.FC = () => {
                   NEXT GAME
                 </Button>
 
-                <Button
-                  className="text-sm font-bold"
-                  theme="clear"
-                  onClick={retryGame}
-                >
-                  RETRY
-                </Button>
+                <div className="space-x-2">
+                  <Button
+                    className="text-sm font-bold"
+                    theme="clear"
+                    onClick={retryGame}
+                  >
+                    RETRY
+                  </Button>
+                  <Button
+                    className="text-sm font-bold"
+                    theme="clear"
+                    onClick={goToHome}
+                  >
+                    HOME
+                  </Button>
+                </div>
               </div>
             ) : (
               <>
@@ -310,6 +319,10 @@ const SmiteContainer: React.FC = () => {
       </div>
     </DefaultLayout>
   );
+
+  function goToHome() {
+    router.push('/');
+  }
 
   function startGame() {
     setReady(true);
