@@ -104,8 +104,8 @@ function useColumns(): Column<ISmiteRank>[] {
       },
     },
     {
-      key: 'baron_nashoor',
-      label: 'Baron nashoor',
+      key: 'baron_nashor',
+      label: 'Baron nashor',
       className: 'w-40 text-center pt-5',
       headClassName: 'w-40 text-center',
       value: (value) => value.baron_nashoor,
